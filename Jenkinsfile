@@ -36,7 +36,7 @@ pipeline {
                 script {
                     // Initialize Terraform just to get the ECR repository URL
                     dir('terraform') {
-                        sh "terraform init -backend-config=\"bucket=ssp-terraform-state-bucket\" -backend-config=\"key=services/order-service/terraform.tfstate\" -backend-config=\"region=${AWS_REGION}\""
+                        sh "terraform init -backend-config=backend.conf"
                         // We select the 'dev' workspace just to read the output. The actual deployment will use the TARGET_ENV workspace.
                         sh 'terraform workspace select dev'
                         env.ECR_REPOSITORY_URL = sh(script: 'terraform output -raw ecr_repository_url', returnStdout: true).trim()
